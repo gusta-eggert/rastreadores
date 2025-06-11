@@ -232,6 +232,12 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        function formatarDataBR(dataISO) {
+    if (!dataISO) return '-';
+    const [ano, mes, dia] = dataISO.split('-');
+    return `${dia}/${mes}/${ano.slice(2)}`; // DD/MM/AA
+    }
+
     function abrirHistorico(imei, patrimonio) {
         document.getElementById('equipamentoInfo').textContent = `Patrimônio: ${patrimonio} | IMEI: ${imei}`;
         const tbody = document.getElementById('tabelaHistoricoBody');
@@ -248,8 +254,9 @@
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
                         <td>${registro.cliente}</td>
-                        <td>${registro.data_saida}</td>
-                        <td>${registro.data_volta || '-'}</td>
+                        <td>${formatarDataBR(registro.data_saida)}</td>
+                        <td>${formatarDataBR(registro.data_volta)}</td>
+
                     `;
                     tbody.appendChild(tr);
                 });
