@@ -80,6 +80,7 @@
                             <th>Cliente</th>
                             <th>Data de Saída</th>
                             <th>Data de Volta</th>
+                            <th>Motivo da Volta</th>
                         </tr>
                     </thead>
                     <tbody id="tabelaHistoricoBody">
@@ -256,6 +257,7 @@
                         <td>${registro.cliente}</td>
                         <td>${formatarDataBR(registro.data_saida)}</td>
                         <td>${formatarDataBR(registro.data_volta)}</td>
+                         <td>${registro.motivo || '-'}</td>
 
                     `;
                     tbody.appendChild(tr);

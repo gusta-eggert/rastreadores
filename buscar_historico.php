@@ -19,7 +19,7 @@ $imei = $_GET['imei'] ?? '';
 $historico = [];
 
 if ($imei) {
-    $stmt = $conn->prepare("SELECT cliente, data_saida, data_volta FROM movimentacoes WHERE imei = ? ORDER BY data_saida DESC");
+    $stmt = $conn->prepare("SELECT cliente, data_saida, data_volta, motivo FROM movimentacoes WHERE imei = ? ORDER BY data_saida DESC");
     if (!$stmt) {
         http_response_code(500);
         echo json_encode(['error' => 'Erro na query']);
