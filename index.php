@@ -26,10 +26,14 @@
     <!DOCTYPE html>
     <html lang="pt-br">
     <head>
-        <meta charset="UTF-8" />
-        <title>Controle de Rastreadores</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-    </head>
+    <meta charset="UTF-8" />
+    <title>Controle de Rastreadores</title>
+    <!-- Bootstrap CSS (CDN) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Seu CSS customizado -->
+    <link href="custom.css" rel="stylesheet" />
+</head>
+
     <body class="bg-light p-4">
 
     <div class="container">
@@ -63,45 +67,43 @@
 </div>
 
 
-        <!-- Tabela dos equipamentos -->
-        <table class="table table-bordered">
-            <thead class="table-dark">
-                <tr>
-                    <th>Patrimônio</th>
-                    <th>IMEI</th>
-                    <th>Modelo</th>
-                    <th>Situação</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody>
+       <!-- Tabela dos equipamentos -->
+<table id="tabelaRastreadores" class="table table-bordered">
+    <thead class="table-dark">
+        <tr>
+            <th>Patrimônio</th>
+            <th>IMEI</th>
+            <th>Modelo</th>
+            <th>Situação</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        $equipamentos = $conn->query("
+            SELECT r.patrimonio, r.imei, m.nome AS modelo_nome, r.situacao
+            FROM rastreadores r
+            LEFT JOIN modelos m ON r.id_modelo = m.id
+        ");
+        while ($eq = $equipamentos->fetch_assoc()):
+        ?>
+            <tr>
+                <td><?= htmlspecialchars($eq['patrimonio']) ?></td>
+                <td><?= htmlspecialchars($eq['imei']) ?></td>
+                <td><?= htmlspecialchars($eq['modelo_nome']) ?></td>
+                <td><?= htmlspecialchars($eq['situacao']) ?></td>
+                <td>
+                    <button class="btn btn-outline-primary btn-sm" 
+                            onclick="abrirHistorico('<?= $eq['imei'] ?>', '<?= $eq['patrimonio'] ?>')"
+                            title="Visualizar histórico">
+                        👁
+                    </button>
+                </td>
+            </tr>
+        <?php endwhile; ?>
+    </tbody>
+</table>
 
-            
-                <?php
-                $equipamentos = $conn->query("
-                    SELECT r.patrimonio, r.imei, m.nome AS modelo_nome, r.situacao
-                    FROM rastreadores r
-                    LEFT JOIN modelos m ON r.id_modelo = m.id
-                ");
-                while ($eq = $equipamentos->fetch_assoc()):
-                ?>
-                    <tr>
-                        <td><?= htmlspecialchars($eq['patrimonio']) ?></td>
-                        <td><?= htmlspecialchars($eq['imei']) ?></td>
-                        <td><?= htmlspecialchars($eq['modelo_nome']) ?></td>
-                        <td><?= htmlspecialchars($eq['situacao']) ?></td>
-                        <td>
-                            <button class="btn btn-outline-primary btn-sm" 
-                                    onclick="abrirHistorico('<?= $eq['imei'] ?>', '<?= $eq['patrimonio'] ?>')"
-                                    title="Visualizar histórico">
-                                👁
-                            </button>
-                        </td>
-                    </tr>
-                <?php endwhile; ?>
-            </tbody>
-        </table>
-    </div>
 
     <!-- Modal Histórico -->
     <div class="modal fade" id="modalHistorico" tabindex="-1" aria-labelledby="modalHistoricoLabel" aria-hidden="true">

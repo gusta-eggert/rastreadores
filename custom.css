@@ -1,0 +1,28 @@
+#tabelaRastreadores thead th {
+    text-align: center;
+}
+
+#tabelaRastreadores th:nth-child(1),
+#tabelaRastreadores td:nth-child(1) {
+    width: 100px; /* largura da coluna Patrimônio */
+}
+
+#tabelaRastreadores th:nth-child(2),
+#tabelaRastreadores td:nth-child(2) {
+    width: 140px; /* largura da coluna IMEI */
+}
+
+#tabelaRastreadores th:nth-child(3),
+#tabelaRastreadores td:nth-child(3) {
+    width: 180px; /* largura da coluna Modelo */
+}
+
+#tabelaRastreadores th:nth-child(4),
+#tabelaRastreadores td:nth-child(4) {
+    width: 120px; /* largura da coluna Situação */
+}
+
+#tabelaRastreadores th:nth-child(5),
+#tabelaRastreadores td:nth-child(5) {
+    width: 50px; /* largura da coluna Ações */
+}
