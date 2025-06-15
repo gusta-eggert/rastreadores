@@ -5,6 +5,23 @@
     $db = 'estoque_rastreadores';
     $conn = new mysqli($host, $user, $pass, $db);
     ?>
+    <?php
+    // Contagem dos rastreadores por situação
+    $disponiveis = $emUso = 0;
+
+    $sql = "SELECT situacao, COUNT(*) AS total FROM rastreadores GROUP BY situacao";
+    $result = $conn->query($sql);
+
+    if ($result) {
+        while ($row = $result->fetch_assoc()) {
+            if ($row['situacao'] === 'Disponível') {
+                $disponiveis = $row['total'];
+            } elseif ($row['situacao'] === 'Em Cliente') {
+                $emUso = $row['total'];
+            }
+        }
+        }
+        ?>
 
     <!DOCTYPE html>
     <html lang="pt-br">
@@ -18,13 +35,33 @@
     <div class="container">
         <h2 class="mb-4">Movimentações de Rastreadores</h2>
 
-        <!-- Botões principais -->
-        <div class="mb-4">
-            <button class="btn btn-success me-2" data-bs-toggle="modal" data-bs-target="#modalCadastrarModelo">Cadastrar Modelo</button>
-            <button class="btn btn-success me-2" data-bs-toggle="modal" data-bs-target="#modalCadastrarRastreador">Cadastrar Rastreador</button>
-            <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#modalRegistrarSaida">Registrar Saída</button>
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalRegistrarVolta">Registrar Volta</button>
+        <!-- Botões e cards lado a lado -->
+<div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+    <!-- Botões -->
+    <div class="d-flex flex-wrap gap-2">
+        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalCadastrarModelo">Cadastrar Modelo</button>
+        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalCadastrarRastreador">Cadastrar Rastreador</button>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalRegistrarSaida">Registrar Saída</button>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalRegistrarVolta">Registrar Volta</button>
+    </div>
+
+    <!-- Cards -->
+    <div class="d-flex gap-3">
+        <div class="card border-success" style="width: 180px;">
+            <div class="card-body text-success">
+                <h6 class="card-title mb-2">Disponíveis</h6>
+                <h4 class="card-text"><?php echo $disponiveis; ?></h4>
+            </div>
         </div>
+        <div class="card border-danger" style="width: 180px;">
+            <div class="card-body text-danger">
+                <h6 class="card-title mb-2">Em Cliente</h6>
+                <h4 class="card-text"><?php echo $emUso; ?></h4>
+            </div>
+        </div>
+    </div>
+</div>
+
 
         <!-- Tabela dos equipamentos -->
         <table class="table table-bordered">
@@ -38,6 +75,8 @@
                 </tr>
             </thead>
             <tbody>
+
+            
                 <?php
                 $equipamentos = $conn->query("
                     SELECT r.patrimonio, r.imei, m.nome AS modelo_nome, r.situacao
@@ -230,6 +269,8 @@
         </form>
     </div>
     </div>
+
+    
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
